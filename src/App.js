@@ -15,11 +15,7 @@ class App extends React.Component {
       <div>
         <Home/>
         <Login/>
-        <Register/>
-        <Reply/>
         <Settings/>
-        <Stories/>
-        <Story/>
       </div>
     );
   }
