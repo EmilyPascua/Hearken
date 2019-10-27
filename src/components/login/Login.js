@@ -11,7 +11,7 @@ class Login extends React.Component {
 		// Set by a condition in the state
 		return(
 			<div>
-				<button onClick={this.props.actions.login}>
+				<button onClick={this.props.actions.loginGoogle}>
 					Press Me To Log In!
 				</button>
 				{/*Login Component (<Register/> in the login component)*/}

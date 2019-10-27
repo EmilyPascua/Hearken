@@ -20,7 +20,7 @@ class App extends React.Component {
 	}
 
 	actions = {
-		login: () => {
+		loginGoogle: () => {
 			const provider = new firebase.auth.GoogleAuthProvider()
 
 			firebase.auth().signInWithPopup(provider)
@@ -29,7 +29,8 @@ class App extends React.Component {
                 	const user = u.user
 
                 	this.setState({user: user})
-                    console.log('Successfully Logged In' + ' ' + user);
+
+                    console.log('Successfully Logged In' + ' ' + user.name);
                 })
                 .catch((err) => {
                     console.log('Error: ' + err.toString())
@@ -44,6 +45,17 @@ class App extends React.Component {
 				)
 				.catch((err) => {console.log('Error: ' + err.toString())})
 		}	
+	}
+
+	componentDidMount() {
+		firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({user: user})
+                
+            } else {
+                this.setState({ user: null })
+            }
+        })
 	}
 
 	render(){
