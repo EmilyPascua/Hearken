@@ -52,6 +52,7 @@ class App extends React.Component {
       fire.database().ref("users/" + user.user_id).set(user);
     },
 
+    // TO-DO: Replace hard-coded value of totalTraits
     getMatch: userTraits => {
       // Hard-coded value of total # of traits possible.
       // Used to calculate percentage of match
@@ -87,6 +88,7 @@ class App extends React.Component {
           }
         }
 
+        // matchedUser = {} if no match was found
         this.setState({
           matchUser: matchedUser
         });
@@ -109,7 +111,7 @@ class App extends React.Component {
                     console.log('Error: ' + err.toString())
                 })
 		},
-		singout: () => {
+		signout: () => {
         firebase.auth().signOut()
           .then((u) => {
               console.log(u.user.name)
