@@ -1,3 +1,9 @@
+.fancy-text {
+	font-family: 'Annie Use Your Telescope', cursive;
+	color:black;
+	font-weight: 400;
+}
+
 .stories-greeting{
 	padding-top: 13%;
 	font-family: 'Pacifico', cursive;
