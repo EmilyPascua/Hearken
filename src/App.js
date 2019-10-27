@@ -19,6 +19,7 @@ class App extends React.Component {
 		user: null,
 		settingsVisible: false,
     theme: null,
+    greetingMessage: null,
   }
   
   actions = {
@@ -126,19 +127,23 @@ class App extends React.Component {
       let today = new Date();
       // I'll leave this here for now, not really needed for this. May be needed in the future.
       let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      let timeOfDay = 0;
+      let timeOfDay = today.getHours();
       let dateTime = date+' '+timeOfDay;
       let theme = null;
+      let greetingMessage = null
       if(timeOfDay >= 0 && timeOfDay < 12){
           theme = ["#6f0979", "#ffebbd"]
+          greetingMessage = "Good Morning, anything you want to tell me?"
       }else if(timeOfDay >= 12 && timeOfDay < 16){
           theme = ["#425891", "#acd9da"]
+         greetingMessage = "Good Day! How's it going?"
       }else if(timeOfDay >= 16 && timeOfDay < 21){
           theme = ["#872458", "#f78300"]
+          greetingMessage = "Good Afternoon - let's talk about it!"
       }else if(timeOfDay >= 21 && timeOfDay < 24){
          theme = ["#151416", "#564379"]
+         greetingMessage = "Good Evening, anything you want to tell me?"
       }
-      console.log("linear-gradient("+theme[0]+","+theme[1]+")")
       this.setState({
         theme:{
           height: "100vh",
@@ -146,6 +151,7 @@ class App extends React.Component {
           overflow: "hidden",
         }
       })
+      this.setState({greetingMessage:greetingMessage})
 
       firebase.auth().onAuthStateChanged((user) => {
               if (user) {
@@ -158,32 +164,10 @@ class App extends React.Component {
     }
 
   render(){
-    // let user = {
-    //   "username": "test",
-    //   "user_id": "1414",
-    //   traits: ["sportsy"],
-    //   isMatched: "false"
-    // }
-
-    // let content = "I just need to like, rant right now."
-
-    // this.actions.postStory(user, content);
-    // let user = {
-    //   "username": "test",
-    //   "user_id": "1414",
-    //   traits: ["sportsy"],
-    //   isMatched: "false"
-    // }
-
-    // this.actions.updateIsMatched(user, true);
-
-    
-
-    // this.actions.insertUser(user);
 
 		return (
 			<div>
-				{this.state.user && !this.state.settingsVisible && <Home theme={this.state.theme}/>}
+				{this.state.user && !this.state.settingsVisible && <Home theme={this.state.theme} greetingMessage={this.state.greetingMessage}/>}
 				{!this.state.user && !this.state.settingsVisible && <Login actions={this.actions}/>}
 				{this.state.settingsVisible && <Settings/>}
 			</div>
