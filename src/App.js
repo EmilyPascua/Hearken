@@ -8,6 +8,7 @@ import Reply from './components/reply/Reply.js';
 import Settings from './components/settings/Settings.js';
 import Stories from './components/stories/Stories.js';
 import Story from './components/story/Story.js';
+import TraitSelect from './components/traitselect/TraitSelect'
 
 import './App.css';
 
@@ -17,28 +18,43 @@ const db = fire.database()
 class App extends React.Component {
 	state = {
 		user: null,
-		settingsVisible: false
-  }
+		settingsVisible: false,
+        traitSelectVisible: false
+    }
   
   actions = {
+    setTraits: (traits) => {
 
-    // replyToStory: () => {
+        const user = this.state.user
 
-    // }
+        console.log(user)
+        user.details.traits = traits
 
-    postStory: (user, content) => {
-      // Generates random/unique ID for story.
-      let id = uuidv1();
+        fire.database().ref("users/" + user.details.uid).update(user)
 
-      let story = {
-        id: id, 
+        this.setState({traitSelectVisible: false})
+        this.actions.getMatch(traits)
+    },
+    sendReply: (content) => {
+
+      let reply = {
         content: content,
-        author_id: user.user_id,
-        responder_id: '',
-        hasReplied: 'no'
+        authorId: this.state.user.details.uid,
+        readerId: '',
+        isRead: 'no'
       }
 
-      fire.database().ref("stories/" + story.id).set(story);
+      fire.database().ref("users/" + this.state.user.details.uid + "/reply").set(reply);
+    },
+    postStory: (content) => {
+      let story = {
+        content: content,
+        authorId: this.state.user.details.uid,
+        responderId: '',
+        hasReply: 'no'
+      }
+
+      fire.database().ref("users/" + this.state.user.details.uid + "/story").set(story);
     },
     // Updates user's status if matched or no longer matched
     updateIsMatched: (user, isMatched) => {
@@ -47,11 +63,28 @@ class App extends React.Component {
         fire.database().ref("users/" + user.uid).update(user);
     },
     insertUser: (user,uid) => {
-        fire.database().ref("users/" + uid).set(user);
+        fire.database().ref("users").once('value', (snapshot) => {
+            if (snapshot.hasChild(uid)) {
+                const userNode = snapshot.child(uid).exportVal()
+                this.setState({user: userNode})
+
+                if (this.state.user.details.traits) {
+                    this.setState({traitSelectVisible: false})
+                }
+                else {
+                    this.setState({traitSelectVisible: true})
+                }
+            }
+            else {
+                fire.database().ref("users/" + user.details.uid).set(user)
+                // this.setState({traitSelectVisible: false})
+            }
+        })
     },
     getMatch: userTraits => {
         // Hard-coded value of total # of traits possible.
         // Used to calculate percentage of match
+        const user = this.state.user
         let totalTraits = 6;
 
         let matchedUser = {};
@@ -62,13 +95,13 @@ class App extends React.Component {
         let dbUsers = snapshot.val();
 
         for (let key in dbUsers) {
-            if (dbUsers.hasOwnProperty(key)) {
+            if (key != this.state.user.details.uid) {
 
-                if(!(dbUsers[key].isMatched)) {
+                if(!(dbUsers[key].details.isMatched)) {
                     continue;
                 }
                   
-                let dbTraits = dbUsers[key].traits;
+                let dbTraits = dbUsers[key].details.traits;
 
                 userTraits = new Set(userTraits);
 
@@ -83,10 +116,14 @@ class App extends React.Component {
                 }
             }
         }
+        if (Object.entries(matchedUser).length == 0 && matchedUser.constructor === Object) {
 
-        this.setState({
-            matchUser: matchedUser
-        });
+        }
+        else {
+            user.details.isMatched = true
+            user.match = matchedUser.details
+            db.ref('users/' + this.state.user.details.uid + '/match').set(matchedUser.details)
+        }
 
       });
     },
@@ -98,18 +135,16 @@ class App extends React.Component {
             	const token = u.credential.accessToken
             	const user = u.user
 
-                //WE need the ask the user their treats on their first login
-                const someTraits = ['moody','shy','bashful','goofy','misfit']
-
                 const userObject = {
                     details: {
                         uid: user.uid,
                         displayName: user.displayName,
                         email: user.email,
-                        isMatched: false,
-                        traits: someTraits
+                        isMatched: false
                     }
                 }
+                this.setState({user: userObject})
+
                 this.actions.insertUser(userObject,user.uid)
             })
             .catch((err) => {
@@ -119,7 +154,6 @@ class App extends React.Component {
 	signout: () => {
         firebase.auth().signOut()
             .then((u) => {
-                console.log(u.user.name)
                 this.setState({user: null})
             })
             .catch((err) => {console.log('Error: ' + err.toString())})
@@ -127,48 +161,44 @@ class App extends React.Component {
     }	
 
     componentDidMount() {
-      firebase.auth().onAuthStateChanged((user) => {
-              if (user) {
-                  this.setState({user: user})
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                const usersRef = fire.database().ref("users")
 
-              } else {
-                  this.setState({ user: null })
-              }
-          })
+                usersRef.once('value', (snapshot) => {
+                    if (snapshot.hasChild(user.uid)) {
+                        const userNode = snapshot.child(user.uid).exportVal()
+
+                        this.setState({user: userNode})
+
+                        if (this.state.user.details.traits) {
+                            this.setState({traitSelectVisible: false})
+                        }
+                        else {
+                            this.setState({traitSelectVisible: true})
+                        }
+                    }
+                })
+                if (this.state.user) {
+                    fire.database().ref('users').on('value',(snapshot) => {
+                    if (this.state.user.details.traits) {
+                            this.actions.getMatch(this.state.user.details.traits)
+                        }
+                    })
+                }
+            }
+        })
     }
 
-  render(){
-    // let user = {
-    //   "username": "test",
-    //   "user_id": "1414",
-    //   traits: ["sportsy"],
-    //   isMatched: "false"
-    // }
-
-    // let content = "I just need to like, rant right now."
-
-    // this.actions.postStory(user, content);
-    // let user = {
-    //   "username": "test",
-    //   "user_id": "1414",
-    //   traits: ["sportsy"],
-    //   isMatched: "false"
-    // }
-
-    // this.actions.updateIsMatched(user, true);
-
-    
-
-    // this.actions.insertUser(user);
-
+    render(){
 		return (
 			<div>
-				{this.state.user && !this.state.settingsVisible && <Home/>}
-				{!this.state.user && !this.state.settingsVisible && <Login actions={this.actions}/>}
-				{this.state.settingsVisible && <Settings/>}
+                {this.state.traitSelectVisible && this.state.user && <TraitSelect actions={this.actions}/>}
+				{this.state.user && <Home/>}
+				{!this.state.traitSelectVisible && !this.state.user && <Login actions={this.actions}/>}
 			</div>
 		)
-  }
+    }
 }
 
 export default App;
