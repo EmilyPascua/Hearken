@@ -162,7 +162,7 @@ class App extends React.Component {
 				{this.state.settingsVisible && <Settings/>}
 			</div>
 		)
-	}
+  }
 }
 
 export default App;
