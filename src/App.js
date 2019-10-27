@@ -17,7 +17,8 @@ const db = fire.database()
 class App extends React.Component {
 	state = {
 		user: null,
-		settingsVisible: false
+		settingsVisible: false,
+    theme: null,
   }
   
   actions = {
@@ -121,6 +122,31 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+      //Get time to set the theme
+      let today = new Date();
+      // I'll leave this here for now, not really needed for this. May be needed in the future.
+      let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      let timeOfDay = 0;
+      let dateTime = date+' '+timeOfDay;
+      let theme = null;
+      if(timeOfDay >= 0 && timeOfDay < 12){
+          theme = ["#6f0979", "#ffebbd"]
+      }else if(timeOfDay >= 12 && timeOfDay < 16){
+          theme = ["#425891", "#acd9da"]
+      }else if(timeOfDay >= 16 && timeOfDay < 21){
+          theme = ["#872458", "#f78300"]
+      }else if(timeOfDay >= 21 && timeOfDay < 24){
+         theme = ["#151416", "#564379"]
+      }
+      console.log("linear-gradient("+theme[0]+","+theme[1]+")")
+      this.setState({
+        theme:{
+          height: "100vh",
+          backgroundImage: "linear-gradient("+theme[0]+","+theme[1]+")",
+          overflow: "hidden",
+        }
+      })
+
       firebase.auth().onAuthStateChanged((user) => {
               if (user) {
                   this.setState({user: user})
@@ -157,7 +183,7 @@ class App extends React.Component {
 
 		return (
 			<div>
-				{this.state.user && !this.state.settingsVisible && <Home/>}
+				{this.state.user && !this.state.settingsVisible && <Home theme={this.state.theme}/>}
 				{!this.state.user && !this.state.settingsVisible && <Login actions={this.actions}/>}
 				{this.state.settingsVisible && <Settings/>}
 			</div>

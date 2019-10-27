@@ -7,12 +7,16 @@ import { FaCircle, FaCloud } from 'react-icons/fa';
 import './home.css'
 
 class Home extends React.Component {
+	style={
+		homeContainer:this.props.theme,
+	}
+
 	render(){
 		//TODO: The reply,stories, and story should be here
 		// Set by a condition in the state
 		//<Reply/>
 		return(
-		<div className="home-container">
+		<div style={this.style.homeContainer}>
 			<div className="home-cloud-center">
 				<Stories/>
 			</div>
