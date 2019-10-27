@@ -40,85 +40,91 @@ class App extends React.Component {
 
       fire.database().ref("stories/" + story.id).set(story);
     },
-
     // Updates user's status if matched or no longer matched
     updateIsMatched: (user, isMatched) => {
-      user.isMatched = isMatched;
+        user.details.isMatched = isMatched;
 
-      fire.database().ref("users/" + user.user_id).update(user);
+        fire.database().ref("users/" + user.uid).update(user);
     },
-
-    insertUser: user => {
-      fire.database().ref("users/" + user.user_id).set(user);
+    insertUser: (user,uid) => {
+        fire.database().ref("users/" + uid).set(user);
     },
-
     getMatch: userTraits => {
-      // Hard-coded value of total # of traits possible.
-      // Used to calculate percentage of match
-      let totalTraits = 6;
+        // Hard-coded value of total # of traits possible.
+        // Used to calculate percentage of match
+        let totalTraits = 6;
 
-      let matchedUser = {};
-      let percentage = -1;
+        let matchedUser = {};
+        let percentage = -1;
 
-      fire.database().ref("users").once("value").then( snapshot => {
+        fire.database().ref("users").once("value").then( snapshot => {
         
         let dbUsers = snapshot.val();
 
         for (let key in dbUsers) {
-          if (dbUsers.hasOwnProperty(key)) {
+            if (dbUsers.hasOwnProperty(key)) {
 
-            if(!(dbUsers[key].isMatched)) {
-              continue;
+                if(!(dbUsers[key].isMatched)) {
+                    continue;
+                }
+                  
+                let dbTraits = dbUsers[key].traits;
+
+                userTraits = new Set(userTraits);
+
+                let intersection = new Set(dbTraits.filter(trait => userTraits.has(trait)));
+
+                let tempPercentage = Math.round((intersection.size / totalTraits) * 100);
+
+                // If multiple users have the highest percentage, then keep the first.
+                if(tempPercentage > percentage) {
+                    percentage = tempPercentage; 
+                    matchedUser = dbUsers[key];
+                }
             }
-              
-            let dbTraits = dbUsers[key].traits;
-            
-            userTraits = new Set(userTraits);
-
-            let intersection = new Set(dbTraits.filter(trait => userTraits.has(trait)));
-            
-            let tempPercentage = Math.round((intersection.size / totalTraits) * 100);
-
-            // If multiple users have the highest percentage, then keep the first.
-            if(tempPercentage > percentage) {
-                percentage = tempPercentage; 
-                matchedUser = dbUsers[key];
-            }
-          }
         }
 
         this.setState({
-          matchUser: matchedUser
+            matchUser: matchedUser
         });
 
       });
     },
     loginGoogle: () => {
-			const provider = new firebase.auth.GoogleAuthProvider()
+		const provider = new firebase.auth.GoogleAuthProvider()
 
-			firebase.auth().signInWithPopup(provider)
-                .then((u) => {
-                	const token = u.credential.accessToken
-                	const user = u.user
+		firebase.auth().signInWithPopup(provider)
+            .then((u) => {
+            	const token = u.credential.accessToken
+            	const user = u.user
 
-                	this.setState({user: user})
+                //WE need the ask the user their treats on their first login
+                const someTraits = ['moody','shy','bashful','goofy','misfit']
 
-                    console.log('Successfully Logged In' + ' ' + user.name);
-                })
-                .catch((err) => {
-                    console.log('Error: ' + err.toString())
-                })
-		},
-		singout: () => {
+                const userObject = {
+                    details: {
+                        uid: user.uid,
+                        displayName: user.displayName,
+                        email: user.email,
+                        isMatched: false,
+                        traits: someTraits
+                    }
+                }
+                this.actions.insertUser(userObject,user.uid)
+            })
+            .catch((err) => {
+                console.log('Error: ' + err.toString())
+            })
+	},
+	signout: () => {
         firebase.auth().signOut()
-          .then((u) => {
-              console.log(u.user.name)
-              this.setState({user: null})
-            }
-          )
-          .catch((err) => {console.log('Error: ' + err.toString())})
-      }	
-    }
+            .then((u) => {
+                console.log(u.user.name)
+                this.setState({user: null})
+            })
+            .catch((err) => {console.log('Error: ' + err.toString())})
+        }
+    }	
 
     componentDidMount() {
       firebase.auth().onAuthStateChanged((user) => {

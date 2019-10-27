@@ -14,7 +14,7 @@ const Stories = (props) => {
 
 	return (
 		<div>
-			<p className="stories-greeting">Share <i class="em em-heartbeat" aria-role="presentation" aria-label="BEATING HEART"></i> and Support!<br></br></p>
+			<p className="stories-greeting">Share <i className="em em-heartbeat" aria-label="BEATING HEART"></i> and Support!<br></br></p>
 			<div className="stories-message-background">
 				<div className="stories-content">Hearken is looking for someone to match <i>you</i> with!
 				<br></br>
