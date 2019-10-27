@@ -19,8 +19,10 @@ class App extends React.Component {
 	state = {
 		user: null,
 		settingsVisible: false,
-        traitSelectVisible: false
-    }
+    traitSelectVisible: false,
+    theme: null,
+    greetingMessage: null,
+  }
   
   actions = {
     setTraits: (traits) => {
@@ -188,15 +190,43 @@ class App extends React.Component {
                 }
             }
         })
+      
+      let today = new Date();
+      // I'll leave this here for now, not really needed for this. May be needed in the future.
+      let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      let timeOfDay = today.getHours();
+      let dateTime = date+' '+timeOfDay;
+      let theme = null;
+      let greetingMessage = null
+      if(timeOfDay >= 0 && timeOfDay < 12){
+          theme = ["#6f0979", "#ffebbd"]
+          greetingMessage = "Good Morning, anything you want to tell me?"
+      }else if(timeOfDay >= 12 && timeOfDay < 16){
+          theme = ["#425891", "#acd9da"]
+         greetingMessage = "Good Day! How's it going?"
+      }else if(timeOfDay >= 16 && timeOfDay < 21){
+          theme = ["#872458", "#f78300"]
+          greetingMessage = "Good Afternoon - let's talk about it!"
+      }else if(timeOfDay >= 21 && timeOfDay < 24){
+         theme = ["#151416", "#564379"]
+         greetingMessage = "Good Evening, anything you want to tell me?"
+      }
+      this.setState({
+        theme:{
+          height: "100vh",
+          backgroundImage: "linear-gradient("+theme[0]+","+theme[1]+")",
+          overflow: "hidden",
+        }
+      })
+      this.setState({greetingMessage:greetingMessage})
     }
 
-    render(){
+   render(){
 		return (
 			<div>
                 {this.state.traitSelectVisible && this.state.user && <TraitSelect actions={this.actions}/>}
 				{this.state.user && <Home/>}
 				{!this.state.traitSelectVisible && !this.state.user && <Login actions={this.actions}/>}
-			</div>
 		)
     }
 }
