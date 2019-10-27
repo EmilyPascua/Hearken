@@ -14,7 +14,7 @@ class Home extends React.Component {
 		return(
 		<div className="home-container">
 			<div className="home-cloud-center">
-				<Story/>
+				<Stories/>
 			</div>
 			<div className="home-sun-container">
 				<div className="home-sun"><FaCircle size="45vh"/></div>

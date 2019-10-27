@@ -1,17 +1,24 @@
 import React from 'react'
+import { FaCloud } from 'react-icons/fa';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form'
 import './stories.css'
-import Cloud from './res/left-cloud.png'
 
-//import HeaderCarousel from '../headercarousel/HeaderCarousel.js';
-//import './body.css'
+const Reply = (props) => {
+	return (
+		<div>
+			<p className="stories-greeting">You've gotten a reply!<br></br></p>
+			<div className="stories-message-background">
+				<Form.Group className="story-message" controlId="exampleForm.ControlTextarea1">
+				<Button variant="link">Your Question</Button> | <Button variant="link">Finished Reading</Button>
+				   <Form.Control as="textarea" rows="3">Sucks to suck!</Form.Control>
+				   - Sincerely, Anonymous
+				</Form.Group>
+ 			
 
-class Stories extends React.Component {
-	
-	render(){
-		//TODO: The reply,stories, and story should be here
-		// Set by a condition in the state
-		return(<div className="">Stories Component</div>)
-	}
+ 			</div>
+		</div>
+	)
 }
 
-export default Stories
+export default Reply
