@@ -9,7 +9,14 @@ class Login extends React.Component {
 	render(){
 		//TODO: The reply,stories, and story should be here
 		// Set by a condition in the state
-		return(<div>Login Component (<Register/> in the login component)</div>)
+		return(
+			<div>
+				<button onClick={this.props.actions.loginGoogle}>
+					Press Me To Log In!
+				</button>
+				{/*Login Component (<Register/> in the login component)*/}
+			</div>
+		)
 	}
 }
 

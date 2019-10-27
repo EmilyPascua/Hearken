@@ -1,5 +1,6 @@
 import React from 'react';
-import Firebase from './config/firebase'
+import firebase from 'firebase'
+import fire from './fire'
 import Home from './components/home/Home.js';
 import Login from './components/login/Login.js';
 import Register from './components/register/Register.js';
@@ -11,18 +12,13 @@ import Story from './components/story/Story.js';
 import './App.css';
 
 const uuidv1 = require('uuid/v1');
-const db = Firebase.database()
+const db = fire.database()
 
 class App extends React.Component {
-
-  state = {
-    user: {
-      user_id:'',
-      username: '',
-      matchUser: undefined
-    }
+	state = {
+		user: null,
+		settingsVisible: false
   }
-    
   
   actions = {
 
@@ -42,18 +38,18 @@ class App extends React.Component {
         hasReplied: 'no'
       }
 
-      Firebase.database().ref("stories/" + story.id).set(story);
+      fire.database().ref("stories/" + story.id).set(story);
     },
 
     // Updates user's status if matched or no longer matched
     updateIsMatched: (user, isMatched) => {
       user.isMatched = isMatched;
 
-      Firebase.database().ref("users/" + user.user_id).update(user);
+      fire.database().ref("users/" + user.user_id).update(user);
     },
 
     insertUser: user => {
-      Firebase.database().ref("users/" + user.user_id).set(user);
+      fire.database().ref("users/" + user.user_id).set(user);
     },
 
     getMatch: userTraits => {
@@ -64,7 +60,7 @@ class App extends React.Component {
       let matchedUser = {};
       let percentage = -1;
 
-      Firebase.database().ref("users").once("value").then( snapshot => {
+      fire.database().ref("users").once("value").then( snapshot => {
         
         let dbUsers = snapshot.val();
 
@@ -96,10 +92,44 @@ class App extends React.Component {
         });
 
       });
+    },
+    loginGoogle: () => {
+			const provider = new firebase.auth.GoogleAuthProvider()
+
+			firebase.auth().signInWithPopup(provider)
+                .then((u) => {
+                	const token = u.credential.accessToken
+                	const user = u.user
+
+                	this.setState({user: user})
+
+                    console.log('Successfully Logged In' + ' ' + user.name);
+                })
+                .catch((err) => {
+                    console.log('Error: ' + err.toString())
+                })
+		},
+		singout: () => {
+        firebase.auth().signOut()
+          .then((u) => {
+              console.log(u.user.name)
+              this.setState({user: null})
+            }
+          )
+          .catch((err) => {console.log('Error: ' + err.toString())})
+      }	
     }
 
+    componentDidMount() {
+      firebase.auth().onAuthStateChanged((user) => {
+              if (user) {
+                  this.setState({user: user})
 
-  }
+              } else {
+                  this.setState({ user: null })
+              }
+          })
+    }
 
   render(){
     // let user = {
@@ -125,14 +155,14 @@ class App extends React.Component {
 
     // this.actions.insertUser(user);
 
-    return (
-      <div>
-        <Home/>
-        <Login/>
-        <Settings/>
-      </div>
-    );
-  }
+		return (
+			<div>
+				{this.state.user && !this.state.settingsVisible && <Home/>}
+				{!this.state.user && !this.state.settingsVisible && <Login actions={this.actions}/>}
+				{this.state.settingsVisible && <Settings/>}
+			</div>
+		)
+	}
 }
 
 export default App;
