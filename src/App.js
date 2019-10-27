@@ -9,13 +9,13 @@ import Stories from './components/stories/Stories.js';
 import Story from './components/story/Story.js';
 
 class App extends React.Component {
-
+//<Login/>
+        //<Settings/>
   render(){
     return (
       <div>
         <Home/>
-        <Login/>
-        <Settings/>
+        
       </div>
     );
   }
