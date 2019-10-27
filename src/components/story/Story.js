@@ -12,8 +12,7 @@ const Story = (props) => {
 			<div className="story-message-background">
 				<Form.Group className="story-message" controlId="exampleForm.ControlTextarea1">
 				   <Form.Control as="textarea" rows="3"/>
-				</Form.Group>
-			    <input type="radio" className="story-radio-item" value="happy" name="item" id="radio1"/>
+				 <input type="radio" className="story-radio-item" value="happy" name="item" id="radio1"/>
 			    <label className="story-label-item" for="radio1"><i className="hvr-shrink story-padding em em-blush" aria-role="presentation" aria-label="SMILING FACE WITH SMILING EYES"></i></label>
 			    
 			    <input type="radio" className="story-radio-item" value="in-love" name="item" id="radio2"/>
@@ -30,6 +29,8 @@ const Story = (props) => {
 			<Button className="story-padding story-button" variant="Link" size="sm">
       			Sincerely, Anonymous
  		   	</Button>
+				</Form.Group>
+
  			</div>
 		</div>
 	)
