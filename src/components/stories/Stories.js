@@ -28,7 +28,8 @@ function checkIfNotEmpty(obj) {
 // you also need to handle if they have already replied to a story
 
 const Stories = (props) => {
-	let currentUser = {
+
+  let currentUser = {
 		traits: ["sportsy", "artsy"],
 		// reply: {
 		// 	content: "Hey man, I'm here for ya",
@@ -77,8 +78,6 @@ const Stories = (props) => {
 	}
 
 	// This view allows the user to reply to the Story of the person they were matched with.
-
-	
 
 
 }
