@@ -4,7 +4,7 @@ import Reply from '../reply/Reply.js';
 import Stories from '../stories/Stories.js';
 import Story from '../story/Story.js';
 import { FaCircle, FaCloud } from 'react-icons/fa';
-import './home.css'
+// import './home.css'
 
 class Home extends React.Component {
 	render(){
