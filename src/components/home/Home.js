@@ -3,11 +3,11 @@ import React from 'react'
 import Reply from '../reply/Reply.js';
 import Stories from '../stories/Stories.js';
 import Story from '../story/Story.js';
-import { FaCircle, FaCloud } from 'react-icons/fa';
+import { FaCircle, FaCloud , FaSignOutAlt} from 'react-icons/fa';
 import './home.css'
 
 class Home extends React.Component {
-	style={
+	style = {
 		homeContainer:this.props.theme,
 	}
 
@@ -17,6 +17,9 @@ class Home extends React.Component {
 		//<Reply/>
 		return(
 		<div style={this.style.homeContainer}>
+			<div className='home-exit-button-container' onClick={this.props.actions.signout}>
+				<FaSignOutAlt color='white'/>
+			</div>
 			<div className="home-cloud-center">
 				<Story message={this.props.greetingMessage}/>
 			</div>

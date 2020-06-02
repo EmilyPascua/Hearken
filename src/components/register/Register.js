@@ -1,30 +1,27 @@
 import React from 'react'
 
 //import HeaderCarousel from '../headercarousel/HeaderCarousel.js';
-import './register.scss'  
+// import './register.scss'  
 
-class Register extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-		  username: "",
-		  email: "",
-		  password: "",
-		  errors: [],
-		  pwdState: null
-		};
-	  }
+export default class Register extends React.Component {
+	state = {
+		username: "",
+		email: "",
+		password: "",
+		errors: [],
+		pwdState: null
+	}
 	
-	  showValidationErr(elm, msg) {
+	showValidationErr(elm, msg) {
 		this.setState((prevState) => ({
-		  errors: [
+			errors: [
 			...prevState.errors, {
-			  elm,
-			  msg
+				elm,
+				msg
 			}
-		  ]
+			]
 		}));
-	  }
+	}
 	
 	  clearValidationErr(elm) {
 		this.setState((prevState) => {

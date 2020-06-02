@@ -1,50 +1,50 @@
-import React from 'react'
+import React from 'react';
 
-// import Register from '../register/Register.js';
+import 'bootstrap/dist/css/bootstrap.css';
+import './Login.css';
+import GoogleIcon from './64px-Google.svg';
 
-//import HeaderCarousel from '../headercarousel/HeaderCarousel.js';
-//import './Login.scss'
+export default class login extends React.Component {
+    state = {
+        googleLogin: true,
+        emailInput: '',
+        passwordInput: ''
+    }
 
-class Login extends React.Component {
-    constructor(props) {
-		super(props);
-		this.state = {};
-	  }
+    login = () => {
+        this.props.actions.login(this.state.emailInput,this.state.passwordInput)
+        this.setState({emailInput: '',passwordInput: ''})
+    }
 
-	render(){
-		return (
-			<div className="inner-container">
-			  <div className="header">
-				Login
-			  </div>
-			  <div className="box">
-	  
-				<div className="input-group">
-				  <label htmlFor="username">Username</label>
-				  <input
-					type="text"
-					name="username"
-					className="login-input"
-					placeholder="Username"/>
-				</div>
-	  
-				<div className="input-group">
-				  <label htmlFor="password">Password</label>
-				  <input
-					type="password"
-					name="password"
-					className="login-input"
-					placeholder="Password"/>
-				</div>
-	  
-				<button
-				  type="button"
-				  className="login-btn"
-				  onClick={this.props.actions.loginGoogle}>Login</button>
-			  </div>
-			</div>
-		  );
-	}
+    handleKeyDown = (e) => {
+        if (e.keyCode === 13) {
+            this.login()
+        }
+    }
+
+    updateEmailInput = (e) =>  {
+        this.setState({emailInput: e.target.value})
+    }
+
+    updatePasswordInput = (e) => {
+        this.setState({passwordInput: e.target.value})
+    }
+
+    createAccount = () => {
+        this.props.actions.createAccount(this.state.emailInput,this.state.passwordInput)
+        this.setState({emailInput: '', passwordInput: ''})
+    }
+
+    render(){
+        return(
+            <div className="login-container">
+                {this.state.googleLogin &&
+                    <button className='login-google-button' type='button' onClick={this.props.actions.googleLogin}>
+                        <img src={GoogleIcon} alt='Google G'/>
+                        <span>Login With Google</span>
+                    </button>
+                }
+            </div>
+        )
+    }
 }
-
-export default Login
