@@ -1,32 +1,47 @@
-import React from 'react'
+import React from 'react';
 import { FaCloud } from 'react-icons/fa';
-import './story.css'
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form'
+import Form from 'react-bootstrap/Form';
+//package library for parsing timestamps
+import Moment from 'moment-timezone';
+
+import './story.css'
 
 export default class Story extends React.Component {
 	state = {
-		id: null,
-		story: null,
 		created: null,
-		mood: null
+		id: null,
+		mood: 'neutral',
+		owner: this.props.user.uid,
+		story: null
 	}
 
+	warning = false;
+
 	updateStory = (e) => {
+		this.warning = false;
 		this.setState({story: e.target.value})
 	}
 
 	sendStory = (e) => {
-		if (e.keyCode == 13 && e.target.value.length > 0) {
-			this.props.actions.sendMessage(this.state,this.props.room.details.id)
-			this.setState({message: ''})
+		if (this.state.story && this.state.story.length > 0) {
+			//TO-DO: Have the time reflect the current continent and city
+			const storyState = this.state;
+
+			storyState.created = Moment().tz("America/Los_Angeles").format("YYYY-MM-DDTHH:mm:ss")
+
+			this.props.actions.sendStory(storyState);
+			this.setState({story: null});
+		}
+		else {
+			this.warning = true;
 		}
 	}
 	
 	handleOnClick = (e) => {
 		const val = e.target.value;
 
-		console.log(val)
+		console.log(val);
 
 		this.setState({mood: val});
 	}
@@ -37,8 +52,8 @@ export default class Story extends React.Component {
 			<div>
 				<p className="story-greeting">{this.props.message}</p>
 				<div className="story-message-background">
-					<Form.Group className="story-message" controlId="exampleForm.ControlTextarea1">
-						<Form.Control as="textarea" rows="3" value={this.state.story} onChange={this.updateStory}/>
+					<textarea className='story-message' value={this.state.story} onChange={this.updateStory}/>
+					<div>
 						<input type="radio" className="story-radio-item" value="happy" name='item' id='1' onClick={this.handleOnClick}/>
 						<label className="story-label-item" for="1"><i className="hvr-shrink story-padding em em-blush" aria-role="presentation" aria-label="SMILING FACE WITH SMILING EYES"></i></label>
 	
@@ -53,12 +68,11 @@ export default class Story extends React.Component {
 	
 						<input type="radio" className="story-radio-item" value="angry" name='item' id='5' onClick={this.handleOnClick}/>
 						<label className="story-label-item" for="5"><i className="hvr-shrink story-padding em em-angry" aria-role="presentation" aria-label="ANGRY FACE"></i>  </label>
-						
 						<Button className="story-padding story-button" type='button' variant="Link" size="sm" onClick={this.sendStory}>
 							Sincerely, Anonymous
 						</Button>
-					</Form.Group>
-	
+					</div>
+					{this.warning && "Don't want to tell me a story?"}
 				 </div>
 			</div>
 		)	

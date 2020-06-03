@@ -21,6 +21,7 @@
 	margin-right: auto;
 	width: 60%;
 	height: 170px;
+	resize: none;
 }
 
 .story-padding{
@@ -29,6 +30,11 @@
 
 .story-button{
 	padding: 25px;
+}
+
+.story-button:hover {
+	border-color: rgb(98, 98, 165);
+	color: white;
 }
 
 .story-radio-item{

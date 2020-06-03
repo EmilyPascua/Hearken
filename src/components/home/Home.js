@@ -21,7 +21,7 @@ class Home extends React.Component {
 				<FaSignOutAlt color='white'/>
 			</div>
 			<div className="home-cloud-center">
-				<Story message={this.props.greetingMessage}/>
+				<Story user={this.props.user} message={this.props.greetingMessage} actions={this.props.actions}/>
 			</div>
 			<div className="home-sun-container">
 				<div className="home-sun"><FaCircle size="45vh"/></div>
