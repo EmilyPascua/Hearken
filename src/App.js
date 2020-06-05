@@ -31,7 +31,8 @@ class App extends React.Component {
     render(){
 		return (
             <BrowserRouter>
-                <Route exact path='/home' render={() => this.props.user && <Home />}/>
+                {/* <Route exact path='/home' render={() => this.props.user && <Home />}/> */}
+                {this.props.user && <Home />}
                 {!this.props.user && <Login />}
             </BrowserRouter>
 		)
