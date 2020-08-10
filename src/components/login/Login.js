@@ -1,7 +1,7 @@
 import React from 'react';
 import GoogleIcon from './Google_G.svg';
 import {connect} from 'react-redux';
-import {login} from '../../actions/root-actions';
+import {login} from '../../flux/actions/root-actions';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './Login.css';

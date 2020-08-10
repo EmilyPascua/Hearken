@@ -1,17 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import DotENV from 'dotenv';
-import {createStore} from 'redux';
-import {Provider} from 'react-redux';
-import {BrowserRouter} from 'react-router-dom'
-import rootReducer from './reducers/root-reducer';
+import App from './components/App';
+import history from './flux/store/history';
+import { storeConfig } from './flux/store/';
+import { initiate } from './firebase';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 
-import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './stylesheets/main.sass';
 
-const store = createStore(rootReducer);
+//TODO: REMOVE ON PRODUCTION
+import ReduxDevTools from './utils/DevTools';
 
-DotENV.config();
+const store = storeConfig();
 
-ReactDOM.render(<Provider store={store}><BrowserRouter><App /></BrowserRouter></Provider>, document.getElementById('root'));
+ReactDOM.render(
+    <React.StrictMode>
+        <Provider store={store}>
+            <ConnectedRouter history={history}>
+                {/*initiate(store) associates firebase with the redux store*/}
+                <ReactReduxFirebaseProvider {...initiate(store)}>
+                    <App/>
+                    <ReduxDevTools/>
+                </ReactReduxFirebaseProvider>
+            </ConnectedRouter>
+        </Provider>
+    </React.StrictMode>,
+    document.getElementById('root')
+);

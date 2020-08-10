@@ -5,7 +5,7 @@ import Story from '../story/Story.js';
 import { FaCircle, FaCloud , FaSignOutAlt} from 'react-icons/fa';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {signout} from '../../actions/root-actions'
+import {signout} from '../../flux/actions/root-actions'
 
 import './home.css'
 
