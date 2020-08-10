@@ -9,7 +9,7 @@ import './Login.css';
 class Login extends React.Component {
     onClickHandler = () => {
         this.props.login();
-        // this.match.history.push('/');
+        this.props.history.push('/');
     }
     render(){
         return(
@@ -35,4 +35,4 @@ const mapDispatchToProps = dispatch => {
     }
 } 
 
-export default connect(mapStateToProps,mapDispatchToProps)(Login)
+export default connect(mapStateToProps,mapDispatchToProps)(Login);

@@ -24,25 +24,9 @@ const postStory = (story) => {
     }
 }
 
-const updateTheme = (theme) => {
-    return {
-        type: 'UPDATE_THEM',
-        theme
-    }
-}
-
-const updateGreeting = (greeting) => {
-    return {
-        type: 'UPDATE_GREETING',
-        greeting
-    }
-}
-
 export {
     updateUser,
     login,
     signout,
-    postStory,
-    updateTheme,
-    updateGreeting
+    postStory
 }

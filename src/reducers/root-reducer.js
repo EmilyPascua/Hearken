@@ -8,26 +8,8 @@ const initState = {
     database: db,
     user: null,
     stories: [],
-    clouds: [],
-    greeting: null,
-    theme: null
+    clouds: []
 }
-
-// fire.auth().onAuthStateChanged((user) => {
-//     console.log('state changed');
-//     if (user) {
-//         const {displayName,email,emailVerified,photoURL,uid} = user
-//                 ,userObj = {
-//                     displayName: displayName,
-//                     email: email,
-//                     emailVerified: emailVerified,
-//                     photoURL: photoURL,
-//                     uid: uid
-//                 }
-//         this.setState({user: userObj,authorized: true})
-//         console.log('returning authorized user');
-//     }
-// });
 
 const rootReducer = (state = initState,action) => {
     // if (action.type === 'GET_USER') {
@@ -45,22 +27,6 @@ const rootReducer = (state = initState,action) => {
     // if (action.type === 'GET_GREETING') {
         
     // }
-    if (action.type === 'UPDATE_THEME') {
-        const theme = action.theme;
-
-        return {
-            ...state,
-            theme
-        }
-    }
-    if (action.type === 'UPDATE_GREETING') {
-        const greeting = action.greeting;
-
-        return {
-            ...state,
-            greeting
-        }
-    }
     if (action.type === 'LOGIN') {
         const provider = new firebase.auth.GoogleAuthProvider()
 
@@ -108,7 +74,7 @@ const rootReducer = (state = initState,action) => {
             });
     }
     if (action.type === 'SIGNOUT') {
-        initState.fire.auth().signOut()
+        initState.firebase.auth().signOut()
             .then((u) => {
                 console.log('user logged off');
 

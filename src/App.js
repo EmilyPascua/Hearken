@@ -2,17 +2,17 @@ import React from 'react';
 import Home from './components/home/Home.js';
 import Login from './components/login/Login.js';
 import {connect} from 'react-redux';
-import {BrowserRouter,Route} from 'react-router-dom';
-import {updateUser} from './actions/root-actions'
+import {Route, Switch} from 'react-router-dom';
+import {updateUser} from './actions/root-actions';
+import {withRouter} from 'react-router-dom';
 
 import './App.css';
 
 class App extends React.Component {
-    componentDidMount() {
+    handleAuth = () => {
         const firebase = this.props.firebase;
 
         firebase.auth().onAuthStateChanged((user) => {
-            console.log('state changed');
             if (user) {
                 const {displayName,email,emailVerified,photoURL,uid} = user
                     ,userObj = {
@@ -22,19 +22,36 @@ class App extends React.Component {
                         photoURL: photoURL,
                         uid: uid
                     }
+                
                 this.props.updateUser(userObj);
+                this.props.history.push('/');
                 console.log('returning authorized user');
+            }
+            else {
+                this.props.history.push('/login');
             }
         });
     }
 
+    componentDidMount() {
+        if (this.props.user) {
+            this.props.history.push('/');
+        }
+        else {
+            this.props.history.push('/login');
+        }
+        this.handleAuth();
+    }
+
     render(){
 		return (
-            <BrowserRouter>
-                {/* <Route exact path='/home' render={() => this.props.user && <Home />}/> */}
-                {this.props.user && <Home />}
-                {!this.props.user && <Login />}
-            </BrowserRouter>
+            <div>
+                {console.log(this.props.user)}
+                <Switch>
+                    <Route exact path='/' render={() => <Home />}/>
+                    <Route path='/login' render={() => <Login />}/>
+                </Switch>
+            </div>
 		)
     }
 }
@@ -52,4 +69,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(App);
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(App));
