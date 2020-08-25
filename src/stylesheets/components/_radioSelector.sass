@@ -1,0 +1,27 @@
+.radio-options
+  display: flex
+  justify-content: center
+  align-items: center
+
+.radio-options > label
+  opacity: 0.3
+  margin-right: 6px
+  cursor: pointer
+
+.radio-options > input
+	display: none !important
+
+.radio-options > input:checked + label
+	opacity: 1
+  
+/* Shrink */
+.hvr-shrink
+  -webkit-transform: perspective(1px) translateZ(0)
+  transform: perspective(1px) translateZ(0)
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0)
+  transition-duration: 0.3s
+  transition-property: transform
+
+.hvr-shrink:hover, .hvr-shrink:focus, .hvr-shrink:active
+  opacity: 1
+  transform: scale(0.9)

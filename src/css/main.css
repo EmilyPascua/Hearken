@@ -1,0 +1,168 @@
+.App {
+  overflow: hidden;
+  text-align: center;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+  font-smoothing: antialiased;
+  font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.login {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.login-window {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  height: 100%;
+  max-width: 30rem;
+  max-height: 40rem;
+  margin: 2rem;
+  border-radius: 12px;
+  background: grey;
+}
+
+.login-google-button {
+  border-radius: 10px;
+  width: 14rem;
+  height: 4rem;
+}
+
+.login-google-button img {
+  width: 14%;
+  margin: 10px;
+  margin-left: 0px;
+}
+
+@media screen and (max-width: 600px) {
+  .home-cloud-container {
+    display: none !important;
+  }
+}
+
+.morning {
+  height: '100vh';
+  background-image: 'linear-gradient(#6f0979,#ffebbd)';
+  overflow: 'hidden';
+  -webkit-transition: '0.3s';
+  transition: '0.3s';
+}
+
+.afternoon {
+  height: '100vh';
+  background-image: 'linear-gradient(#6f0979,#ffebbd)';
+  overflow: 'hidden';
+  -webkit-transition: '0.3s';
+  transition: '0.3s';
+}
+
+.evening {
+  height: '100vh';
+  background-image: 'linear-gradient(#6f0979,#ffebbd)';
+  overflow: 'hidden';
+  -webkit-transition: '0.3s';
+  transition: '0.3s';
+}
+
+.night {
+  height: '100vh';
+  background-image: 'linear-gradient(#6f0979,#ffebbd)';
+  overflow: 'hidden';
+  -webkit-transition: '0.3s';
+  transition: '0.3s';
+}
+
+.home-cloud-center {
+  color: white;
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  z-index: 3;
+}
+
+.home-exit-button-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: absolute;
+  z-index: 999;
+  font-size: 2.5vw;
+  width: 80px;
+  height: 80px;
+  left: 40px;
+  top: 40px;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.home-exit-button-container:hover {
+  font-size: 3vw;
+}
+
+.home-greeting {
+  font-family: 'Pacifico', cursive;
+  font-size: 40px;
+}
+
+.home-cloud-right {
+  height: 4rem;
+  color: white;
+  -webkit-transform: scaleX(-1);
+          transform: scaleX(-1);
+  float: right;
+}
+
+.home-cloud-left {
+  color: white;
+  float: left;
+}
+
+.home-cloud-container {
+  padding-top: 30%;
+  position: relative;
+  z-index: 2;
+}
+
+.home-sun-container {
+  padding-top: 40%;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  z-index: 1;
+}
+
+.home-sun {
+  color: #fff0b0;
+}
